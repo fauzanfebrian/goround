@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"fmt"
 	"net/http/httputil"
 	"sync/atomic"
 
@@ -27,8 +26,6 @@ func (backend *Backend) getLiveIndex() int64 {
 	for range backend.poolsLen {
 		counter = atomic.AddInt64(&backend.counter, 1)
 		index = (counter - 1) % int64(backend.poolsLen)
-
-		fmt.Printf("Index: %d and Counter: %d\n", index, counter)
 
 		if backend.serverPools[index].IsAlive() {
 			return index
