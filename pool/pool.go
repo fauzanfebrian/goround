@@ -56,7 +56,7 @@ func (serverPool *ServerPool) CheckServer() {
 }
 
 func (serverPool *ServerPool) IsAlive() bool {
-	serverPool.mu.Lock()
+	serverPool.mu.RLock()
 	defer serverPool.mu.Unlock()
 	return serverPool.alive
 }
