@@ -18,7 +18,7 @@ func main() {
 			defer wg.Done()
 			mux := http.NewServeMux()
 			mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-				fmt.Printf("Received request on %s\n", p)
+				fmt.Printf("Received request on %s from %s, origin %s\n", p, r.Header.Get("X-Forwarded-For"), r.RemoteAddr)
 				fmt.Fprintf(w, "Hello from Server %s\n", p)
 			})
 
