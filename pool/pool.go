@@ -8,6 +8,7 @@ import (
 
 type ServerPool struct {
 	Port  int
+	Url   string
 	alive bool
 	mu    sync.RWMutex
 }
@@ -16,8 +17,7 @@ func (serverPool *ServerPool) CheckServer() {
 	serverPool.mu.Lock()
 	defer serverPool.mu.Unlock()
 
-	url := fmt.Sprintf("http://localhost:%d", serverPool.Port)
-	resp, err := http.Get(url)
+	resp, err := http.Get(serverPool.Url)
 	if err != nil {
 		fmt.Printf("Check server %d error: %s\n", serverPool.Port, err)
 		serverPool.alive = false

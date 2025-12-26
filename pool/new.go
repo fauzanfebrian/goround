@@ -1,6 +1,7 @@
 package pool
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -17,8 +18,10 @@ func CreateServerPools(ports ...int) []*ServerPool {
 	serverPools := []*ServerPool{}
 
 	for _, port := range ports {
+		url := fmt.Sprintf("http://localhost:%d", port)
 		serverPool := ServerPool{
 			Port: port,
+			Url:  url,
 		}
 
 		go checkServer(&serverPool)
