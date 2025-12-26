@@ -18,8 +18,7 @@ func CreateServerPools(ports ...int) []*ServerPool {
 
 	for _, port := range ports {
 		serverPool := ServerPool{
-			Port:  port,
-			Alive: false,
+			Port: port,
 		}
 
 		go checkServer(&serverPool)
