@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	b "github.com/fauzanfebrian/goround/backend"
 	"github.com/fauzanfebrian/goround/pool"
@@ -13,23 +12,23 @@ import (
 func main() {
 	serverPools := pool.CreateServerPools(8081, 8082, 8083)
 
-	fmt.Println("Waiting for a pool up and runing")
-	for true {
-		isAPoolAlive := false
+	// fmt.Println("Waiting for a pool up and runing")
+	// for true {
+	// 	isAPoolAlive := false
 
-		for _, serverPool := range serverPools {
-			if serverPool.IsAlive() {
-				isAPoolAlive = true
-				break
-			}
-		}
+	// 	for _, serverPool := range serverPools {
+	// 		if serverPool.IsAlive() {
+	// 			isAPoolAlive = true
+	// 			break
+	// 		}
+	// 	}
 
-		if isAPoolAlive {
-			break
-		}
+	// 	if isAPoolAlive {
+	// 		break
+	// 	}
 
-		time.Sleep(2 * time.Second)
-	}
+	// 	time.Sleep(2 * time.Second)
+	// }
 
 	port := 8000
 	addr := fmt.Sprintf(":%d", port)
