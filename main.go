@@ -42,6 +42,7 @@ func main() {
 			reverseProxy.ServeHTTP(w, r)
 			return
 		}
+		w.WriteHeader(http.StatusServiceUnavailable)
 		fmt.Fprintf(w, "There's no available server right now, try again later\n")
 	})
 
