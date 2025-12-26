@@ -2,8 +2,10 @@ package pool
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"sync"
+	"time"
 )
 
 type ServerPool struct {
@@ -13,7 +15,8 @@ type ServerPool struct {
 	mu    sync.RWMutex
 }
 
-func (serverPool *ServerPool) CheckServer() {
+// Server checking using HTTP Method / Layer 7
+func (serverPool *ServerPool) CheckServerHttp() {
 	serverPool.mu.Lock()
 	defer serverPool.mu.Unlock()
 
@@ -28,6 +31,24 @@ func (serverPool *ServerPool) CheckServer() {
 		fmt.Printf("Check server %d error: Got statusCode %d from server\n", serverPool.Port, resp.StatusCode)
 		return
 	}
+
+	fmt.Printf("Check server %d succeed\n", serverPool.Port)
+	serverPool.alive = true
+}
+
+// Server checking using TCP Connection / Layer 4 (From instruction)
+func (serverPool *ServerPool) CheckServer() {
+	serverPool.mu.Lock()
+	defer serverPool.mu.Unlock()
+
+	address := fmt.Sprintf("localhost:%d", serverPool.Port)
+	conn, err := net.DialTimeout("tcp", address, 3*time.Second)
+	if err != nil {
+		fmt.Printf("Check server %d error: %s\n", serverPool.Port, err)
+		serverPool.alive = false
+		return
+	}
+	defer conn.Close()
 
 	fmt.Printf("Check server %d succeed\n", serverPool.Port)
 	serverPool.alive = true
