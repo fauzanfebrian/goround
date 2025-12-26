@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"time"
 
+	b "github.com/fauzanfebrian/goround/backend"
 	"github.com/fauzanfebrian/goround/pool"
 )
 
@@ -28,5 +31,22 @@ func main() {
 		time.Sleep(2 * time.Second)
 	}
 
-	fmt.Println("Load balancer is ready to accept a connection")
+	port := 8000
+	addr := fmt.Sprintf(":%d", port)
+	backend := b.NewBackend(serverPools)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		reverseProxy := backend.GetReverseProxy()
+		if reverseProxy != nil {
+			reverseProxy.ServeHTTP(w, r)
+			return
+		}
+		fmt.Fprintf(w, "There's no available server right now, try again later\n")
+	})
+
+	log.Printf("Server listening on port %d", port)
+	if err := http.ListenAndServe(addr, mux); err != nil {
+		log.Fatal(err)
+	}
 }

@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	ports := []string{"8081", "8082", "8083"}
+	// ports := []string{"8081", "8082", "8083"}
+	ports := []string{"8081", "8083"}
 	var wg sync.WaitGroup
 
 	for _, port := range ports {
